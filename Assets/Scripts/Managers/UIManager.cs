@@ -5,6 +5,8 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
 
+    public static UIManager UI;
+
     public enum Canvases 
     { 
         MainMenu,
@@ -12,10 +14,24 @@ public class UIManager : MonoBehaviour
         Pause,
         Settings,
         NextLevel,
-        GameOver
+        GameOver,
+        LoadLevel,
     }
 
     public Canvas[] canvasComponents;
+
+    private void Awake()
+    {
+        if (UI == null)
+        {
+            UI = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (UI != null && UI != this)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -37,4 +53,5 @@ public class UIManager : MonoBehaviour
             else if ((int)canvas == i) canvasComponents[i].gameObject.SetActive(true);
         }
     }
+
 }

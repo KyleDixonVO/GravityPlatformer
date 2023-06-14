@@ -6,11 +6,25 @@ using System;
 
 public class LevelManager : MonoBehaviour
 {
+    public static LevelManager LM;
 
     public enum Scenes 
     { 
         MainMenu,
         LevelOne,
+    }
+
+    private void Awake()
+    {
+        if(LM == null)
+        {
+            LM = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (LM != null && LM != this)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     // Start is called before the first frame update
@@ -27,10 +41,10 @@ public class LevelManager : MonoBehaviour
 
     public void SwapActiveScene(Scenes activeScene, bool unloadOtherScenes)
     {
+        SceneManager.LoadScene((int)activeScene);
         for (int i = 0; i < Enum.GetNames(typeof(Scenes)).Length; i++)
         {
             if ((int)activeScene != i && unloadOtherScenes) SceneManager.UnloadSceneAsync(i);
-            else if ((int)activeScene == i) SceneManager.LoadScene((int)activeScene);
         }
     }
 }
